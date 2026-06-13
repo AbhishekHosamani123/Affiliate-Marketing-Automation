@@ -47,7 +47,7 @@ The backend will run on **http://localhost:5000**.
    - **Environment**: `Node`
    - **Region**: Select closest to your database
    - **Root Directory**: `backend` (This points Render directly to our subfolder!)
-   - **Build Command**: `npm install`
+   - **Build Command**: `npm install && pip install requests`
    - **Start Command**: `node server.js`
 5. Go to the **Environment** tab on Render and add all backend variables from `.env.example`:
    - `SUPABASE_URL`

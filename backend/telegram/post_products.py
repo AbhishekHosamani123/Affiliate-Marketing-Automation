@@ -3,7 +3,7 @@ import json
 import os
 from pathlib import Path
 import sys
-import pandas as pd
+import csv
 import requests
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -72,32 +72,41 @@ def main():
             sys.exit(1)
 
         try:
-            df = pd.read_csv(CSV_PATH)
+            rows = []
+            header = []
+            with open(CSV_PATH, mode='r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                header = reader.fieldnames or []
+                rows = list(reader)
         except Exception as e:
             print(json.dumps({"ok": False, "error": f"Failed to read CSV: {str(e)}"}))
             sys.exit(1)
 
-        if "status" not in df.columns:
+        if "status" not in header:
             print(json.dumps({"ok": False, "error": "products.csv must contain a status column"}))
             sys.exit(1)
 
-        pending_products = df[df["status"].astype(str).str.lower() == "pending"]
+        pending_index = -1
+        product = None
+        for idx, r in enumerate(rows):
+            if str(r.get("status", "")).lower() == "pending":
+                pending_index = idx
+                product = r
+                break
 
-        if pending_products.empty:
+        if product is None:
             print(json.dumps({"ok": True, "message": "No pending products found in CSV."}))
             sys.exit(0)
-
-        product = pending_products.iloc[0]
         
         # Safely handle missing custom columns in CSV fallback
         product_title = str(product.get("product_title", "🔥 SPECIAL OFFER!"))
-        product_name = str(product["product_name"])
-        price = product["price"]
+        product_name = str(product.get("product_name", ""))
+        price = float(product.get("price", 0.0))
         discount = str(product.get("discount", "Limited Time Deal"))
         benefit = str(product.get("benefit", "Premium quality item, grab yours before stock runs out!"))
-        affiliate_link = str(product["affiliate_link"])
+        affiliate_link = str(product.get("affiliate_link", ""))
         hashtags = str(product.get("hashtags", "#AffiliateMarketing #Deals"))
-        image_path_or_url = str(product["image_path"])
+        image_path_or_url = str(product.get("image_path", ""))
 
     # Format price to remove trailing .0 if it's a whole number
     if isinstance(price, (int, float)):
@@ -193,8 +202,15 @@ def main():
 
         # Update CSV status if we were reading from the CSV
         if is_manual:
-            df.loc[pending_products.index[0], "status"] = "posted"
-            df.to_csv(CSV_PATH, index=False)
+            rows[pending_index]["status"] = "posted"
+            try:
+                with open(CSV_PATH, mode='w', encoding='utf-8', newline='') as f:
+                    writer = csv.DictWriter(f, fieldnames=header)
+                    writer.writeheader()
+                    writer.writerows(rows)
+            except Exception as e:
+                print(json.dumps({"ok": False, "error": f"Failed to write CSV: {str(e)}"}))
+                sys.exit(1)
 
         print(json.dumps({"ok": True, "caption": caption, "result": result}))
 
