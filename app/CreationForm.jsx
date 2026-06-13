@@ -317,7 +317,6 @@ export default function CreationForm({ onViewDashboard }) {
                                             onDragLeave={() => setIsDragging(false)}
                                             onDrop={handleDrop}
                                             className={styles.uploadInput} 
-                                            required 
                                         />
 
                                         {imagePreview ? (
