@@ -44,10 +44,10 @@ def main():
     # Combine environment sources (OS env variables take precedence)
     all_env = {**parent_env, **parent_env_local, **env_values, **os.environ}
 
-    BOT_TOKEN = all_env.get("TELEGRAM_BOT_TOKEN")
+    BOT_TOKEN = str(all_env.get("TELEGRAM_BOT_TOKEN", "")).strip().strip('"').strip("'")
     CHANNEL_USERNAME = "@MofxvE487gowN2Y1"
 
-    if not BOT_TOKEN:
+    if not BOT_TOKEN or BOT_TOKEN == "" or BOT_TOKEN == "None":
         print(json.dumps({"ok": False, "error": "TELEGRAM_BOT_TOKEN is not set in environment or env files"}))
         sys.exit(1)
 

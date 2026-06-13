@@ -9,5 +9,5 @@ try:
 except ImportError:
     pass
 
-IG_USER_ID = os.getenv("IG_USER_ID")
-ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+IG_USER_ID = os.getenv("IG_USER_ID", "").strip().strip('"').strip("'")
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN", "").strip().strip('"').strip("'")
