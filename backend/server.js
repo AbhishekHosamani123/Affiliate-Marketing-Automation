@@ -13,21 +13,23 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:3000",
   "http://localhost:3001"
-].filter(Boolean);
+].filter(Boolean).map(o => o.trim().replace(/\/$/, ""));
 
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps, curl, or server-to-server)
     if (!origin) return callback(null, true);
     
-    // Check if the origin matches our allowed origins list
-    const isAllowed = allowedOrigins.includes(origin) || allowedOrigins.includes("*");
-    if (isAllowed) {
-      return callback(null, true);
-    }
+    const cleanOrigin = origin.trim().replace(/\/$/, "");
     
-    // Default to allow all during local development
-    if (process.env.NODE_ENV !== "production") {
+    // Check if the origin matches our allowed origins list
+    const isAllowed = 
+      allowedOrigins.includes(cleanOrigin) || 
+      allowedOrigins.includes("*") || 
+      process.env.FRONTEND_URL === "*" || 
+      !process.env.FRONTEND_URL;
+      
+    if (isAllowed) {
       return callback(null, true);
     }
     
