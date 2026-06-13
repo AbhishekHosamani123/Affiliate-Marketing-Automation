@@ -1,0 +1,423 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at top, rgba(251, 191, 36, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.14), transparent 28%),
+    linear-gradient(180deg, #fff7ed 0%, #fff1f2 44%, #f8fafc 100%);
+  color: #1f2937;
+}
+
+.shell {
+  width: 100%;
+  max-width: 920px;
+}
+
+.card,
+.successCard {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(251, 146, 60, 0.18);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+  overflow: hidden;
+}
+
+.header {
+  padding: 28px 28px 22px;
+  background: linear-gradient(135deg, #9f1239 0%, #fb7185 45%, #f97316 100%);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.headerLeft {
+  flex: 1;
+}
+
+.headerNavButton {
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.headerNavButton:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-1px);
+}
+
+.kicker {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.92;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.subtitle {
+  margin: 12px 0 0;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.content {
+  padding: 28px;
+}
+
+.notice {
+  background: linear-gradient(180deg, #fff7ed 0%, #fff1f2 100%);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+  border-radius: 18px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  font-size: 14px;
+  color: #7c2d12;
+}
+
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  padding: 14px 16px;
+  font-size: 16px;
+  background: #fff;
+  color: #111827;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.input:focus {
+  border-color: #fb7185;
+  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.14);
+}
+
+.uploadBox {
+  position: relative;
+}
+
+.uploadInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dropzone {
+  border: 2px dashed rgba(251, 113, 133, 0.35);
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(255, 228, 230, 0.55), rgba(255, 251, 235, 0.7));
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 28px;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dropzone.dragging {
+  border-color: #ec4899;
+  background: linear-gradient(180deg, rgba(254, 205, 211, 0.75), rgba(254, 243, 199, 0.85));
+  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.25);
+}
+
+.dropzoneTitle {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: #9f1239;
+}
+
+.dropzoneHint {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.previewRow {
+  display: grid;
+  grid-template-columns: 104px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  background: #fff;
+  padding: 14px;
+}
+
+.previewImage {
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+.previewMeta {
+  min-width: 0;
+}
+
+.previewName {
+  margin: 0;
+  font-weight: 800;
+  color: #111827;
+  word-break: break-word;
+}
+
+.previewText {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.removeButton,
+.submitButton,
+.copyButton,
+.openButton,
+.secondaryButton {
+  border: none;
+  border-radius: 14px;
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+}
+
+.removeButton,
+.secondaryButton {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.removeButton:hover,
+.secondaryButton:hover {
+  background: #e5e7eb;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+  color: #fff;
+  box-shadow: 0 12px 26px rgba(236, 72, 153, 0.28);
+}
+
+.submitButton:hover,
+.copyButton:hover,
+.openButton:hover,
+.secondaryButton:hover,
+.removeButton:hover {
+  transform: translateY(-1px);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.successCard {
+  padding: 30px;
+}
+
+.successBadge {
+  width: fit-content;
+  margin: 0 auto 18px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #ecfdf5;
+  color: #047857;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.successTitle {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 900;
+  color: #111827;
+}
+
+.successSubtitle {
+  margin: 10px auto 0;
+  max-width: 60ch;
+  text-align: center;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.statusMessage {
+  margin: 18px auto 0;
+  max-width: 70ch;
+  text-align: center;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  font-weight: 700;
+}
+
+.successGrid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.successImageWrap {
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #f9fafb;
+}
+
+.successImage {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.successDetails {
+  display: grid;
+  gap: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 22px;
+  padding: 22px;
+}
+
+.metaLabel {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.metaValue,
+.priceValue {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #111827;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.priceValue {
+  color: #047857;
+  font-size: 28px;
+}
+
+.linkText {
+  color: #be185d;
+  font-weight: 700;
+  text-decoration: underline;
+  word-break: break-word;
+}
+
+.actionRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.copyButton {
+  background: #047857;
+  color: #fff;
+}
+
+.openButton {
+  background: #fff;
+  color: #111827;
+  border: 1px solid #d1d5db;
+}
+
+.footerActions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 14px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .content,
+  .header,
+  .successCard {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .previewRow,
+  .successGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .previewRow {
+    justify-items: start;
+  }
+
+  .previewImage {
+    width: 100%;
+    height: 220px;
+  }
+
+  .successImage {
+    min-height: 220px;
+  }
+}
