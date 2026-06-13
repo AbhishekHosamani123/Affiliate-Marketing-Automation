@@ -5,6 +5,20 @@ const path = require("path");
 const { createClient } = require("@supabase/supabase-js");
 require("dotenv").config();
 
+const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+let supabaseAdmin = null;
+if (supabaseUrl && supabaseServiceKey) {
+    supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+}
+
+let supabaseAnon = null;
+if (supabaseUrl && supabaseAnonKey) {
+    supabaseAnon = createClient(supabaseUrl, supabaseAnonKey);
+}
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -88,15 +102,12 @@ async function buildTelegramPhotoUrl(imageUrl) {
         return normalized;
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseAnonKey) {
+    const client = supabaseAdmin || supabaseAnon;
+    if (!client) {
         return normalized;
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
-    const { data, error } = await supabase.storage
+    const { data, error } = await client.storage
         .from(objectRef.bucket)
         .createSignedUrl(objectRef.objectPath, 60 * 30);
 
@@ -148,6 +159,7 @@ function runPythonScript(scriptPathParts, args) {
 app.post("/api/telegram-post", async (req, res) => {
     try {
         const { 
+            id,
             product_title, 
             product_name, 
             price, 
@@ -216,8 +228,35 @@ app.post("/api/telegram-post", async (req, res) => {
         } else if (instagramResult.ok) {
             statusMessage = `Saved to Supabase and posted to Instagram, but Telegram post failed: ${telegramResult.error || "Unknown error"}`;
         } else {
+            statusMessage = `Telegram failed: ${telegramResult.error || "Unknown error"}. Instagram failed: ${instagramResult.error || "Unknown error"}`;
+        }
+
+        if (id && supabaseAdmin) {
+            try {
+                const updateData = {
+                    telegram_posted: !!telegramResult.ok,
+                    instagram_posted: !!instagramResult.ok
+                };
+                if (generatedCaption) {
+                    updateData.caption = generatedCaption;
+                }
+                const { error: dbError } = await supabaseAdmin
+                    .from("products")
+                    .update(updateData)
+                    .eq("id", id);
+                if (dbError) {
+                    console.error(`Database update failed for ID ${id}:`, dbError);
+                } else {
+                    console.log(`Database status updated successfully for product ID ${id}`);
+                }
+            } catch (dbErr) {
+                console.error(`Exception updating product in DB for ID ${id}:`, dbErr);
+            }
+        }
+
+        if (!telegramResult.ok && !instagramResult.ok) {
             return res.status(500).json({ 
-                error: `Telegram failed: ${telegramResult.error}. Instagram failed: ${instagramResult.error}` 
+                error: statusMessage 
             });
         }
 

@@ -135,6 +135,7 @@ export default function CreationForm({ onViewDashboard }) {
 
             try {
                 telegramData = await postProduct({
+                    id: insertedProduct?.id,
                     product_title: productTitle.trim(),
                     product_name: productName.trim(),
                     price: Number(price),
@@ -160,7 +161,10 @@ export default function CreationForm({ onViewDashboard }) {
                     updateData.telegram_posted = !!telegramData.telegram?.ok
                     updateData.instagram_posted = !!telegramData.instagram?.ok
                 }
-                await supabase.from("products").update(updateData).eq("id", insertedProduct.id)
+                const { error: updateError } = await supabase.from("products").update(updateData).eq("id", insertedProduct.id)
+                if (updateError) {
+                    console.error("Frontend update fallback failed (expected if RLS policies are not run manually):", updateError)
+                }
             }
 
             setSubmittedProduct({

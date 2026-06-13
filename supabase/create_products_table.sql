@@ -45,6 +45,21 @@ for insert
 to public
 with check (true);
 
+drop policy if exists "Allow public update of products" on products;
+create policy "Allow public update of products"
+on products
+for update
+to public
+using (true)
+with check (true);
+
+drop policy if exists "Allow public delete of products" on products;
+create policy "Allow public delete of products"
+on products
+for delete
+to public
+using (true);
+
 drop policy if exists "Allow public read access to product images" on storage.objects;
 create policy "Allow public read access to product images"
 on storage.objects

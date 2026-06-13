@@ -143,12 +143,12 @@ export default function Dashboard({ onViewForm }) {
                                                         {product.telegram_posted ? "✔️" : "❌"}
                                                     </span>
                                                 </td>
-                                                <td className={product.instagram_posted ? styles.successMark : styles.failMark}>
+                                                <td className={styles.centerCol}>
                                                     <span className={product.instagram_posted ? styles.successMark : styles.failMark}>
                                                         {product.instagram_posted ? "✔️" : "❌"}
                                                     </span>
                                                 </td>
-                                                <td className={product.pinterest_posted ? styles.successMark : styles.failMark}>
+                                                <td className={styles.centerCol}>
                                                     <span className={product.pinterest_posted ? styles.successMark : styles.failMark}>
                                                         {product.pinterest_posted ? "✔️" : "❌"}
                                                     </span>
